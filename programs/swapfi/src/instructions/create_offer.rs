@@ -16,6 +16,15 @@ pub struct CreateOffer<'info>{
     #[account(mint::token_program = token_program)]
     pub requested_token_mint: InterfaceAccount<'info, Mint>,
 
+
+    #[account(
+        mut,
+        associated_token::mint = provided_token_mint,
+        associated_token::authority = offer_creator,
+        associated_token::token_program = token_program,
+    )]
+    pub offer_creator_token_account: InterfaceAccount<'info, TokenAccount>,
+
     #[account(
         init,
         payer = offer_creator,
