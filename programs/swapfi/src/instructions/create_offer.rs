@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{TokenAccount, TokenInterface};
+use anchor_spl::token_interface::{Mint, TokenAccount, TokenInterface};
 
 use crate::state::Offer;
 use crate::constants::ANCHOR_DISCRIMINATOR;
@@ -12,6 +12,9 @@ pub struct CreateOffer<'info>{
 
     #[account(mint::token_program = token_program)]
     pub provided_token_mint: InterfaceAccount<'info, Mint>,
+
+    #[account(mint::token_program = token_program)]
+    pub requested_token_mint: InterfaceAccount<'info, Mint>,
 
     #[account(
         init,
