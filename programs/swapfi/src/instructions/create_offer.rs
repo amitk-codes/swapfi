@@ -1,4 +1,5 @@
 use anchor_lang::prelude::*;
+use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::token_interface::{Mint, TokenAccount, TokenInterface};
 
 use crate::constants::ANCHOR_DISCRIMINATOR;
@@ -45,4 +46,6 @@ pub struct CreateOffer<'info> {
     pub system_program: Program<'info, System>,
 
     pub token_program: Interface<'info, TokenInterface>,
+
+    pub associated_token_program: Program<'info, AssociatedToken>,
 }
