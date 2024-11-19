@@ -62,3 +62,19 @@ pub fn lock_tokens_to_vault(ctx: Context<CreateOffer>, provided_token_amount: u6
         &ctx.accounts.token_program,
     )
 }
+
+pub fn save_offer_on_chain(
+    ctx: Context<CreateOffer>,
+    id: u64,
+    requested_amount: u64,
+) -> Result<()> {
+    ctx.accounts.offer_account.set_inner(Offer {
+        id,
+        creator: ctx.accounts.offer_creator.key(),
+        provided_token_mint: ctx.accounts.provided_token_mint.key(),
+        requested_token_mint: ctx.accounts.requested_token_mint.key(),
+        requested_amount,
+        bump: ctx.bumps.offer_account,
+    });
+    Ok(())
+}
