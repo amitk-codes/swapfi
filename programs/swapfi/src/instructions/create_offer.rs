@@ -5,6 +5,8 @@ use anchor_spl::token_interface::{Mint, TokenAccount, TokenInterface};
 use crate::constants::ANCHOR_DISCRIMINATOR;
 use crate::state::Offer;
 
+use super::transfer_tokens;
+
 #[derive(Accounts)]
 #[instruction(id: u64)]
 pub struct CreateOffer<'info> {
@@ -48,4 +50,15 @@ pub struct CreateOffer<'info> {
     pub token_program: Interface<'info, TokenInterface>,
 
     pub associated_token_program: Program<'info, AssociatedToken>,
+}
+
+pub fn lock_tokens_to_vault(ctx: Context<CreateOffer>, provided_token_amount: u64) -> Result<()> {
+    transfer_tokens(
+        &ctx.accounts.offer_creator_token_account,
+        &ctx.accounts.vault_account,
+        &provided_token_amount,
+        &ctx.accounts.provided_token_mint,
+        &ctx.accounts.offer_creator,
+        &ctx.accounts.token_program,
+    )
 }
