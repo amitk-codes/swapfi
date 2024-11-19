@@ -52,7 +52,7 @@ pub struct CreateOffer<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn lock_tokens_to_vault(ctx: Context<CreateOffer>, provided_token_amount: u64) -> Result<()> {
+pub fn lock_tokens_to_vault(ctx: &Context<CreateOffer>, provided_token_amount: u64) -> Result<()> {
     transfer_tokens(
         &ctx.accounts.offer_creator_token_account,
         &ctx.accounts.vault_account,
