@@ -25,4 +25,10 @@ pub mod swapfi {
         instructions::save_offer_on_chain(ctx, id, requested_token_amount)?;
         Ok(())
     }
+
+    pub fn accept_swap_offer(ctx: Context<AcceptOffer>) -> Result<()> {
+        instructions::send_requested_tokens_to_offer_creator(&ctx)?;
+        instructions::send_tokens_from_vault_to_acceptor_and_close_vault(ctx)?;
+        Ok(())
+    }
 }
