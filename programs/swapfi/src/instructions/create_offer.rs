@@ -38,7 +38,7 @@ pub struct CreateOffer<'info> {
 
     #[account(
         init,
-        payer = offer_account,
+        payer = offer_creator,
         associated_token::mint = provided_token_mint,
         associated_token::authority = offer_account,
         associated_token::token_program = token_program,
