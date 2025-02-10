@@ -25,7 +25,7 @@ pub struct CreateOffer<'info> {
         associated_token::authority = offer_creator,
         associated_token::token_program = token_program,
     )]
-    pub offer_creator_token_account: InterfaceAccount<'info, TokenAccount>,
+    pub offer_creator_provided_token_account: InterfaceAccount<'info, TokenAccount>,
 
     #[account(
         init,
@@ -54,7 +54,7 @@ pub struct CreateOffer<'info> {
 
 pub fn lock_tokens_to_vault(ctx: &Context<CreateOffer>, provided_token_amount: u64) -> Result<()> {
     transfer_tokens(
-        &ctx.accounts.offer_creator_token_account,
+        &ctx.accounts.offer_creator_provided_token_account,
         &ctx.accounts.vault_account,
         &provided_token_amount,
         &ctx.accounts.provided_token_mint,
