@@ -105,7 +105,7 @@ describe("SwapFi", () => {
     console.dir({ fetchOfferAccount }, { depth: Infinity });
 
     assert.equal(
-      fetchOfferAccount.creator.toString(),
+      fetchOfferAccount.offerCreator.toString(),
       offerCreator.publicKey.toString()
     );
     assert.equal(
@@ -120,5 +120,50 @@ describe("SwapFi", () => {
       fetchOfferAccount.requestedAmount.toNumber(),
       requestedTokenAmount
     );
+  });
+
+  it("should send tokens from the acceptor to the creator, and from the vault to the acceptor.", async () => {
+    const [offerAccountPDA] = web3.PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("offer"),
+        offerCreator.publicKey.toBuffer(),
+        new BN(offerId).toArrayLike(Buffer, "le", 8),
+      ],
+      program.programId
+    );
+
+    const accounts = {
+      offerAcceptor: offerAcceptor.publicKey,
+      offerAccount: offerAccountPDA,
+      tokenProgram: TOKEN_PROGRAM,
+    };
+    const tx = await program.methods
+      .acceptSwapOffer()
+      .accounts(accounts)
+      .signers([offerAcceptor])
+      .rpc();
+    console.log({ tx });
+
+    const offerCreatorTokenAccountBalance =
+      await connection.getTokenAccountBalance(
+        offerCreatorRequestedTokenAccount
+      );
+    const formattedOfferCreatorBalance =
+      offerCreatorTokenAccountBalance.value.amount;
+
+    const offerAcceptorTokenAccountBalance =
+      await connection.getTokenAccountBalance(
+        offerAcceptorRequestedTokenAccount
+      );
+    const formattedOfferAcceptorBalance =
+      offerAcceptorTokenAccountBalance.value.amount;
+
+    console.log({
+      formattedOfferAcceptorBalance,
+      formattedOfferCreatorBalance,
+    });
+
+    assert.equal(formattedOfferCreatorBalance, requestedTokenAmount.toString());
+    assert.equal(formattedOfferAcceptorBalance, providedTokenAmount.toString());
   });
 });
