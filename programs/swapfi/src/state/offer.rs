@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 #[derive(InitSpace)]
 pub struct Offer {
     pub id: u64,
-    pub creator: Pubkey,
+    pub offer_creator: Pubkey,
     pub provided_token_mint: Pubkey,
     pub requested_token_mint: Pubkey,
     pub requested_amount: u64,

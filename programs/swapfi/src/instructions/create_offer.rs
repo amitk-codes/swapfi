@@ -70,7 +70,7 @@ pub fn save_offer_on_chain(
 ) -> Result<()> {
     ctx.accounts.offer_account.set_inner(Offer {
         id,
-        creator: ctx.accounts.offer_creator.key(),
+        offer_creator: ctx.accounts.offer_creator.key(),
         provided_token_mint: ctx.accounts.provided_token_mint.key(),
         requested_token_mint: ctx.accounts.requested_token_mint.key(),
         requested_amount,
